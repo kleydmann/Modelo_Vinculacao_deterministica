@@ -1,0 +1,87 @@
+##########################################################
+# Carregamento de pacotes
+
+library(randomNames)
+library(tidyverse)
+library(lubridate)
+library(abjutils)
+
+
+# Definindo diretÃ³rio de trabalho
+
+setwd("C:/Users/User/Desktop/Pasta de trabalho")
+
+
+# Importa??o dos bancos de dados para o ambiente R
+
+Banco_1 <- read.csv2("Banco_1.csv")
+Banco_2 <- read.csv2("Banco_2.csv")
+
+# Exemplod e exclus?o de vari?veis
+
+Banco_1$X <- NULL
+Banco_2$X <- NULL
+
+# Sele??o das vari?veis de interesse
+
+Banco_1 <- select( Banco_1, Nome, Nome_mae, DT_NASC, Banco_nome, Teste_X)
+Banco_2 <- select( Banco_2, Nome, Nome_mae, DT_NASC, Banco_nome, Teste_Z)
+
+
+
+# Verificando a natureza (codifica??o) das vari?veis-chave
+
+class(Banco_1$Nome)
+class(Banco_1$Nome_mae)
+class(Banco_1$DT_NASC)
+class(Banco_2$Nome)
+class(Banco_2$Nome_mae)
+class(Banco_2$DT_NASC)
+
+# Convertendo tipo da variÃ¡vel de "Data de nascimento"
+
+Banco_1$DT_NASC <- ymd(Banco_1$DT_NASC)
+Banco_2$DT_NASC <- ymd(Banco_2$DT_NASC)
+
+# Deixando as letras maiÃºsculas
+
+Banco_1$Nome     <- toupper(Banco_1$Nome)
+Banco_1$Nome_mae <- toupper(Banco_1$Nome_mae)
+
+Banco_2$Nome     <- toupper(Banco_2$Nome)
+Banco_2$Nome_mae <- toupper(Banco_2$Nome_mae)
+
+
+# Tratamento das vari?veis nominais, Banco_1 e Banco_2
+
+Banco_1$Nome <- str_replace_all(Banco_1$Nome,"\  | DA |,|;|:|-| DE | E | DO | DAS | DOS |  ", " " )
+Banco_1$Nome <- rm_accent(Banco_1$Nome)
+
+Banco_1$Nome_mae <- str_replace_all(Banco_1$Nome_mae,"\  | DA |,|;|:|-| DE | E | DO | DAS | DOS |  ", " " )
+Banco_1$Nome_mae <- rm_accent(Banco_1$Nome_mae)
+
+Banco_2$Nome <- str_replace_all(Banco_2$Nome,"\  | DA |,|;|:|-| DE | E | DO | DAS | DOS |  ", " " )
+Banco_2$Nome <- rm_accent(Banco_2$Nome)
+
+Banco_2$Nome_mae <- str_replace_all(Banco_2$Nome_mae,"\  | DA |,|;|:|-| DE | E | DO | DAS | DOS |  ", " " )
+Banco_2$Nome_mae <- rm_accent(Banco_2$Nome_mae)
+
+# RemoÃ§Ã£o de espaÃ§os em branco
+
+Banco_1$Nome     <- str_replace_all(Banco_1$Nome," ", "" )
+Banco_1$Nome_mae <- str_replace_all(Banco_1$Nome_mae," ", "" )
+Banco_2$Nome     <- str_replace_all(Banco_2$Nome," ", "" )
+Banco_2$Nome_mae <- str_replace_all(Banco_2$Nome_mae," ", "" )
+
+# Vincula??o determin?stica por m?todo Inner_Join, ou seja, apenas registros congruentes em ambas as bases
+
+# Utilizando apenas 1 chave
+Banco_vinculado_1_chave  <- inner_join(Banco_1,Banco_2, by = "Nome")
+
+# Utilizando 2 chaves
+Banco_vinculado_2_chaves <- inner_join(Banco_1,Banco_2, by = c("Nome","Nome_mae"))
+
+# Utilizando 3 chaves
+Banco_vinculado_3_chaves <- inner_join(Banco_1,Banco_2, by = c("Nome","Nome_mae","DT_NASC"))
+
+##############################################################################################
