@@ -1,0 +1,30 @@
+##########################################################
+
+Banco_1 <- as.data.frame(randomNames(10000, ethnicity=4, name.order="first.last", name.sep = " "))
+Banco_2 <- as.data.frame(randomNames(500000, ethnicity=4, name.order="first.last", name.sep = " "))
+
+colnames(Banco_1) = "Nome"
+colnames(Banco_2) = "Nome"
+
+Banco_1$Nome_mae <- randomNames(10000,gender=1,ethnicity=4, which.names="first", name.sep = " ")
+#Banco_1$DT_NASC <- ymd(substr(as_datetime( runif(10000, 1546290000, 1577739600)),1,10))
+Banco_1$DT_NASC <- sample(seq(as.Date('2000/01/01'), as.Date('2000/01/31'), by="day"),10)
+
+  
+Banco_2$Nome_mae <- randomNames(500000,gender=1,ethnicity=4, which.names="first", name.sep = " ")
+#Banco_2$DT_NASC <- ymd(substr(as_datetime( runif(500000, 1546290000, 1577739600)),1,10))
+Banco_2$DT_NASC <- sample(seq(as.Date('2000/01/01'), as.Date('2000/01/31'), by="day"),10)
+
+
+Banco_1$Banco_nome       <- "Banco_1"
+Banco_1$Teste_X  <- "X"
+Banco_1$Teste_Y   <- "Y"
+
+Banco_2$Banco_nome <- "Banco_2"
+Banco_2$Teste_W  <- "W"
+Banco_2$Teste_Z   <- "Z"
+
+write.csv2(Banco_1, "Banco_1.csv")
+write.csv2(Banco_2, "Banco_2.csv")
+
+##########################################################
